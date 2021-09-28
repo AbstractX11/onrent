@@ -58,17 +58,9 @@
   </div>
 </template>
 
-<<<<<<< HEAD
 <script lang="js">
 import {ref,reactive} from "vue"
 import axios from 'axios'
-=======
-<script lang="ts">
-import {ref,reactive} from "vue"
-import signupValidation from '../composables/signupValidation'
-import router from '../router/index'
-
->>>>>>> d7756c4 (little fixes)
 
 export default {
     setup(){
@@ -78,7 +70,6 @@ export default {
             password:'',
         })
         const confirm = ref('')
-<<<<<<< HEAD
         const errors= reactive({
             passwordError:null,
             confirmError:null
@@ -104,26 +95,6 @@ export default {
 
 
         return{form,confirm,handleSubmit,Validate,errors}
-=======
-       let errors= reactive({
-            passwordError:null,
-            confirmError:null
-        })
-
-        const Validate =async()=>{
-          const data = await signupValidation(form,confirm.value,errors)
-          if(data.data!==null){
-            if(data.data.loginStatus===true){
-              router.replace({name:'Home'})
-              
-            }
-          }
-          errors = data.errors
-               
-        } 
-
-        return{form,confirm,Validate,errors}
->>>>>>> d7756c4 (little fixes)
 
     }
 

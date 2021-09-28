@@ -12,11 +12,7 @@ router.post("/", async (req, res) => {
     username: username,
   });
   console.log("request received")
-<<<<<<< HEAD
-  return res.json({ hello: "hi" });
-=======
   return res.json({ loginStatus: true});
->>>>>>> d7756c4 (little fixes)
 });
 
 export default router;
