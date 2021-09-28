@@ -1,0 +1,7 @@
+/node_modules
+/.env
+<<<<<<< HEAD
+/firebase
+=======
+/src/firebase
+>>>>>>> d7756c4 (little fixes)
