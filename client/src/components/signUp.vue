@@ -61,7 +61,8 @@
 <script lang="ts">
 import { ref, reactive } from "vue";
 import router from "../router";
-import { auth, createUser } from "../firebase/firebase";
+import { auth} from "../firebase/firebase";
+import {createUser} from "../firebase/userCollection"
 
 export default {
   setup() {

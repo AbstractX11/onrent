@@ -18,27 +18,13 @@ const Config = {
 
 // Initialize Firebase
 const firebaseApp =  firebase.initializeApp(Config);
-const db = firebaseApp.firestore();
-const usersCollection = db.collection ('/users')
+export const db = firebaseApp.firestore();
+
+
+//firebase auth
 export const auth = firebaseApp.auth();
 
 
-export const createUser = (user:any)=>{
-  return usersCollection.doc(user.uid).set({
-    username:user.username,
-  })
-}
-
-export const getuser =async (id:string)=>{
-  const user = await usersCollection.doc(id).get()
-  return user.exists? user.data(): null
-}
-export const deleteUser = (id:string)=>{
-  return usersCollection.doc(id).delete()
-}
-export const updateUser = (id:string,user:any)=>{
-  return usersCollection.doc(id).update(user)
-}
 // export const useLoadUsers =()=>{
 //   const users =ref([])
 //   const close = usersCollection.onSnapshot(snapshot=>{
