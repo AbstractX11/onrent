@@ -33,10 +33,10 @@
       />
       <!-- <div id="terms"><input id="checkbox" type="checkbox" name="terms" v-model="terms" required>
         <label>Accept terms and condition</label></div> -->
-      <p v-if="errors.passwordError">
-        {{ errors.passwordError }}
+      <p class="error" v-if="errors.mainError">
+        {{ errors.mainError }}
       </p>
-      <p v-if="errors.confirmError">
+      <p class="error" v-if="errors.confirmError">
         {{ errors.confirmError }}
       </p>
 
@@ -72,7 +72,7 @@ export default {
     });
     const confirm = ref("");
     const errors = reactive({
-      passwordError: "",
+      mainError: "",
       confirmError: "",
     });
     const handleSubmit = async () => {
@@ -90,15 +90,20 @@ export default {
           router.replace({ name: "Home" });
         }
       } catch (error) {
-        console.log(error);
+        const errorCode = error.code;
+        if (errorCode==="auth/invalid-email"){
+          errors.mainError = "Invalid email address"
+        }else if (errorCode === "auth/email-already-in-use"){
+          errors.mainError = "An account already exists with given email address"
+        }else if (errorCode === "auth/weak-password"){
+          errors.mainError = "Password should be at least 6 characters"
+        }
       }
     };
     const Validate = () => {
-      errors.passwordError =
-        form.password.length < 8 ? "Password must be 8 chars long" : "";
       errors.confirmError =
         form.password !== confirm.value ? "Passwords do not match" : "";
-      if (!errors.passwordError && !errors.confirmError) {
+      if (!errors.confirmError) {
         handleSubmit();
       }
     };
@@ -202,6 +207,10 @@ input {
   margin-right: 10px;
 }
 .linktologin {
+  color: #ce5050;
+}
+.error{
+  font-size:small;
   color: #ce5050;
 }
 </style>

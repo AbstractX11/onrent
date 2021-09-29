@@ -2,8 +2,11 @@
   <div id="form">
     <h2>Login</h2>
     <form v-on:submit.prevent="handleSubmit">
-      <input type="text" placeholder="Email" v-model="form.email" required />
+      <input type="email" placeholder="Email" v-model="form.email" required />
       <input type="password" placeholder="Password" v-model="form.password" required />
+       <p class="error" v-if="errors">
+        {{errors}}
+      </p>
       <p class="centered forgetpswd">Forget Password?</p>
       <button id="loginbtn">Log In</button>
     </form>
@@ -24,8 +27,7 @@
 </template>
 
 <script lang="ts">
-import {reactive} from 'vue'
-import router from '../router/index'
+import {reactive,ref} from 'vue'
 import {auth} from "../firebase/firebase"
 export default {
     setup(){
@@ -33,16 +35,21 @@ export default {
         email:'',
         password:''
       })
-      const handleSubmit =()=>{
+      const errors =ref ('')
+      const handleSubmit =async()=>{
         try {
-          auth.signInWithEmailAndPassword(form.email,form.password)
-          router.replace({name:"Home"})
+          await auth.signInWithEmailAndPassword(form.email,form.password)
         }
         catch (error) {
-          console.log(error);
+          const errorCode = error.code;
+          if(errorCode==="auth/user-not-found"){
+            errors.value = "There is no user corresponding to the given email."
+          }else if(errorCode === "auth/wrong-password"){
+            errors.value = "Wrong Password"
+          }
         }
       }
-      return{form,handleSubmit}
+      return{form,handleSubmit,errors}
     }
 };
 </script>
@@ -121,6 +128,10 @@ input {
   margin-right: 10px;
 }
 .linktosignup {
+  color: #ce5050;
+}
+.error{
+  font-size:small;
   color: #ce5050;
 }
 </style>

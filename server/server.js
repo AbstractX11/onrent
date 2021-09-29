@@ -2,7 +2,7 @@
 import express from 'express';
 import http from 'http';
 import dotenv from 'dotenv';
-import RegisterRoute from './Routes/register-route.js';
+// import RegisterRoute from './Routes/register-route.js';
 import cors from 'cors';
 
 // dot_env config
@@ -21,13 +21,13 @@ app.use(cors({
 app.use(express.json({limit: '50mb'}))
 
 // api endpoints
-app.use('/register',RegisterRoute)
+// app.use('/register',RegisterRoute)
 
 // db-connection
 
 // server listener
 server.listen(PORT, ()=>{
-    console.log('Listening to localhost:8000')
+    console.log('Listening to localhost:8080')
 })
 
 // need to provide auth key for accessing the api endpoints for security and removing password sending even if hashed to react.js. Refactoring the code for more optimizations.

@@ -29,27 +29,36 @@
         border-top:1px solid #CE5050;
         justify-content:center;
         padding-top:10px;
-        "><button @click=logout>Log-out</button>
+        "><button @click="popupToggle">Log-out</button>
         </li>
 
         </div>
         
       </ul>
     </div>
+    <pop-ups v-if="popupStatus">
+      <p>Are you sure you want to logout?</p>
+      <div class="buttons">
+        <button id="cancel" @click="popupToggle">Cancel</button>
+        <button id="confirm" @click="logout">Confirm</button>
+      </div>
+    </pop-ups>
   </div>
 </template>
 
 <script lang="ts">
 import {ref} from "vue"
 import logo from '../components/logo.vue'
+import popUps from '../components/popUps.vue'
 import {auth} from "../firebase/firebase"
 import router from "../router/index"
 
 export default {
-  components:{logo},
+  components:{logo,popUps},
   props:['authStatus'],
   setup(){
     const dropdownStatus= ref(false);
+    const popupStatus = ref(false)
     const logout = ()=>{
       auth.signOut()
       router.replace({name:"Login"})
@@ -58,7 +67,10 @@ export default {
     const toggleStatus = ()=>{
       dropdownStatus.value=!dropdownStatus.value
     }
-    return{dropdownStatus, toggleStatus,logout}
+    const popupToggle =()=>{
+      popupStatus.value=!popupStatus.value
+    }
+    return{dropdownStatus, toggleStatus,logout,popupStatus,popupToggle}
     
   }
 
@@ -119,6 +131,29 @@ p{
   outline:none;
   border:none;
   background: transparent;
+  cursor: pointer;
+}
+.buttons button{
+    font-weight: bold;
+    border:none;
+    outline:none;
+    background: rgba(44, 44, 44, 1);
+    border-radius: 5px;
+    margin:5px;
+    margin-bottom:0;
+    padding:7px;
+    cursor: pointer;
+}
+.buttons{
+    text-align: right;
+    margin-bottom:0;
+
+}
+#cancel{
+    color:#CE5050;
+}
+#confirm{
+    color:#50ce76;
 }
 
 </style>
