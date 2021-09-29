@@ -52,8 +52,4 @@ const router = createRouter({
   routes
 })
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d7756c4 (little fixes)
 export default router

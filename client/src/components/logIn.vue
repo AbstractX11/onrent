@@ -1,9 +1,9 @@
 <template>
   <div id="form">
     <h2>Login</h2>
-    <form>
-      <input type="text" placeholder="Username" required />
-      <input type="password" placeholder="Password" required />
+    <form v-on:submit.prevent="handleSubmit">
+      <input type="text" placeholder="Email" v-model="form.email" required />
+      <input type="password" placeholder="Password" v-model="form.password" required />
       <p class="centered forgetpswd">Forget Password?</p>
       <button id="loginbtn">Log In</button>
     </form>
@@ -23,11 +23,26 @@
   </div>
 </template>
 
-<script>
-// import axios from 'axios'
+<script lang="ts">
+import {reactive} from 'vue'
+import router from '../router/index'
+import {auth} from "../firebase/firebase"
 export default {
     setup(){
-        
+      const form = reactive({
+        email:'',
+        password:''
+      })
+      const handleSubmit =()=>{
+        try {
+          auth.signInWithEmailAndPassword(form.email,form.password)
+          router.replace({name:"Home"})
+        }
+        catch (error) {
+          console.log(error);
+        }
+      }
+      return{form,handleSubmit}
     }
 };
 </script>

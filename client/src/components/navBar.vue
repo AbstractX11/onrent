@@ -15,7 +15,7 @@
         <img src="../assets/Image/signin.svg">
       </div>
       <ul v-if="dropdownStatus" class="dropdown">
-        <li v-if="!loginStatus">
+        <li v-if="!authStatus">
           <img src="../assets/Image/user.svg"/>
           <router-link style="text-decoration:none;
           color:black;" :to="{name:'Login'}">Login</router-link>
@@ -29,8 +29,7 @@
         border-top:1px solid #CE5050;
         justify-content:center;
         padding-top:10px;
-        ">
-          Log-out
+        "><button @click=logout>Log-out</button>
         </li>
 
         </div>
@@ -40,19 +39,26 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {ref} from "vue"
 import logo from '../components/logo.vue'
+import {auth} from "../firebase/firebase"
+import router from "../router/index"
 
 export default {
   components:{logo},
+  props:['authStatus'],
   setup(){
     const dropdownStatus= ref(false);
-    const loginStatus= ref(false);
+    const logout = ()=>{
+      auth.signOut()
+      router.replace({name:"Login"})
+      
+    }
     const toggleStatus = ()=>{
       dropdownStatus.value=!dropdownStatus.value
     }
-    return{dropdownStatus, toggleStatus, loginStatus}
+    return{dropdownStatus, toggleStatus,logout}
     
   }
 
@@ -92,6 +98,7 @@ p{
   cursor: pointer;
 }
 .dropdown{
+  font-family: Poppins;
   width:110px;
   background: #FFFFFF;
   position:absolute;
@@ -107,6 +114,11 @@ p{
   align-items: center;
   justify-content: space-between;
   margin-bottom:10px;
+}
+.dropdown div li button{
+  outline:none;
+  border:none;
+  background: transparent;
 }
 
 </style>

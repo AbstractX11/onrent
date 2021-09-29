@@ -1,18 +1,18 @@
 <template>
-    <logo></logo>
+<div>
+     <logo></logo>
     <main>
         <sign-up></sign-up>
         <img src="../assets/Image/signup.svg">
     </main>
-    
+</div>  
 </template>
 
 <script>
 import Logo from '@/components/logo.vue'
 import signUp from '../components/signUp.vue'
 export default {
-    components:{signUp,Logo}
-
+    components:{signUp,Logo},
 }
 </script>
 

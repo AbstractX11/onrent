@@ -1,15 +1,14 @@
 <template>
- <nav-bar></nav-bar>
-
+<div>
+ <nav-bar :authStatus="authStatus"></nav-bar>
+</div>
 </template>
 
 <script lang="ts">
-<<<<<<< HEAD
-  import navBar from '@/components/navBar.vue'
-=======
   import navBar from '../components/navBar.vue'
->>>>>>> d7756c4 (little fixes)
   export default{
-    components:{navBar}
+    components:{navBar},
+    props:['authStatus'],
+
   }
 </script>

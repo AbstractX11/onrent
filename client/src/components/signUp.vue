@@ -58,47 +58,53 @@
   </div>
 </template>
 
-<script lang="js">
-import {ref,reactive} from "vue"
-import axios from 'axios'
+<script lang="ts">
+import { ref, reactive } from "vue";
+import router from "../router";
+import { auth, createUser } from "../firebase/firebase";
 
 export default {
-    setup(){
-        const form = reactive({
-            username:'',
-            email:'',
-            password:'',
-        })
-        const confirm = ref('')
-        const errors= reactive({
-            passwordError:null,
-            confirmError:null
-        })
-        const handleSubmit=()=>{
-            axios.post('http://localhost:8080/register',{
-                username:form.username,
-                email:form.email,
-                password:form.password
-
-            })
+  setup() {
+    const form = reactive({
+      username: "",
+      email: "",
+      password: "",
+    });
+    const confirm = ref("");
+    const errors = reactive({
+      passwordError: "",
+      confirmError: "",
+    });
+    const handleSubmit = async () => {
+      try {
+        const cred = await auth.createUserWithEmailAndPassword(
+          form.email,
+          form.password
+        );
+        if (cred.user) {
+          const userRecord = {
+            uid:cred.user.uid,
+            username:form.username
+          }
+          createUser(userRecord);
+          router.replace({ name: "Home" });
         }
-
-        const Validate=()=>{
-            errors.passwordError = form.password.length < 8 && 'Password must be 8 chars long'
-            errors.confirmError = form.password !== confirm.value && 'Passwords do not match'
-            if (!errors.passwordError && !errors.confirmError){
-                console.log('validpassword')
-                handleSubmit()
-            }
-        }
-      
-
-
-        return{form,confirm,handleSubmit,Validate,errors}
-
-    }
-
-}
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const Validate = () => {
+      errors.passwordError =
+        form.password.length < 8 ? "Password must be 8 chars long" : "";
+      errors.confirmError =
+        form.password !== confirm.value ? "Passwords do not match" : "";
+      if (!errors.passwordError && !errors.confirmError) {
+        handleSubmit();
+      }
+    };
+    return { form, confirm, Validate, handleSubmit, errors};
+  },
+};
 </script>
 
 <style scoped>
