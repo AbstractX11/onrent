@@ -9,6 +9,7 @@
 
 <script>
 export default {
+    props:['togglepopUp']
 }
 </script>
 
@@ -27,7 +28,7 @@ export default {
 
 }
 .popup-inner{
-    background: #CE5050;
+    background: rgba(44, 44, 44, 1);
     padding:10px;
     border-radius: 5px;
 }

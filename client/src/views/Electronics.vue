@@ -1,7 +1,7 @@
 <template>
-<div>
-  <nav-bar></nav-bar>
-  <div v-for="product in products" :key="product.id">
+<div class="electronics">
+  <nav-bar :authStatus="authStatus"></nav-bar>
+  <div class="card" v-for="product in products" :key="product.id">
     <section-card :product="product">
     </section-card>
   </div>
@@ -15,10 +15,11 @@ import {ref} from 'vue'
 import SectionCard from '../components/sectionCard.vue'
 export default {
   components:{navBar,SectionCard},
+  props:['authStatus'],
   setup(){
       const products = ref([])
       const Products = async()=>{
-          products.value = await getProducts()
+          products.value = await getProducts('/products/types/electronics')
       }
       Products()
       return{products}
@@ -27,6 +28,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.card{
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+}
 
 </style>

@@ -1,28 +1,28 @@
 <template>
 <div>
-  <router-view :authStatus="authStatus"></router-view>
+  <router-view :uid="uid" :authStatus="authStatus"></router-view>
 </div>
 </template>
 <script lang="ts">
 import {ref} from 'vue'
 import {auth} from './firebase/firebase'
-import router from './router/index'
 
 export default {
   setup(){
+    const uid =ref('')
     const authStatus = ref(false)
     auth.onAuthStateChanged((user:any)=>{
     if(user){
+      uid.value = user.uid
       console.log("user logged in")
       authStatus.value = true;
-      router.replace({name:"Home"})
     }else{
       console.log("user logged out")
       authStatus.value = false
     }
   })
     
-    return {authStatus}
+    return {authStatus,uid}
   }
 
 }

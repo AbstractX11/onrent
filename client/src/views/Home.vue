@@ -1,6 +1,6 @@
 <template>
 <div>
- <nav-bar :authStatus="authStatus"></nav-bar>
+  <nav-bar :authStatus="authStatus"></nav-bar>
 </div>
 </template>
 
@@ -9,6 +9,5 @@
   export default{
     components:{navBar},
     props:['authStatus'],
-
   }
 </script>
