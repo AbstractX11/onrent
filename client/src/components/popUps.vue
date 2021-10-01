@@ -15,6 +15,7 @@ export default {
 
 <style scoped>
 .popup{
+    z-index:5;
     font-family:Poppins;
     position:fixed;
     top:0;

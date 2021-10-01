@@ -20,7 +20,8 @@
         <img src="../assets/Image/search.svg" />
       </router-link>
       <div @click="toggleStatus" id="account">
-        <img src="../assets/Image/signin.svg" />
+        <img class="avatar" v-if="authStatus" :src="user.image" />
+        <img v-else src="../assets/Image/signin.svg"/>
       </div>
       <ul v-if="dropdownStatus" class="dropdown">
         <li v-if="!authStatus">
@@ -63,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { reactive,ref, computed} from "vue";
 import logo from "../components/logo.vue";
 import popUps from "../components/popUps.vue";
 import { auth } from "../firebase/firebase";
@@ -71,10 +72,18 @@ import router from "../router/index";
 
 export default {
   components: { logo, popUps },
-  props: ["authStatus"],
-  setup() {
+  props: ["authStatus","userData"],
+  setup(props:any) {
+    const user= reactive({
+      username:computed(()=>props.userData.username),
+      image:computed(()=>props.userData.image)
+    })
     const dropdownStatus = ref(false);
     const popupStatus = ref(false);
+    const imgsrc = ref('../assets/Image/signin.svg')
+    if(!user.image){
+      imgsrc.value = user.image
+    }
     const logout = () => {
       auth.signOut();
       router.replace({ name: "Login" });
@@ -85,7 +94,7 @@ export default {
     const popupToggle = () => {
       popupStatus.value = !popupStatus.value;
     };
-    return { dropdownStatus, toggleStatus, logout, popupStatus, popupToggle };
+    return { dropdownStatus, toggleStatus, logout, popupStatus, popupToggle,imgsrc,user};
   },
 };
 </script>
@@ -109,6 +118,9 @@ p {
   font-size: 15px;
   line-height: 36px;
 }
+#nav .router-link-active{
+  border-bottom:4px solid #ce5050;
+}
 #sidediv {
   display: flex;
   justify-content: right;
@@ -120,8 +132,19 @@ p {
   margin-left: 15px;
   margin-bottom: -1px;
   cursor: pointer;
+  border-radius:50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#account .avatar{
+  height: 100%;
+  width:100%;
+  object-fit: cover;
 }
 .dropdown {
+  z-index: 2;
   font-family: Poppins;
   width: 110px;
   background: #ffffff;

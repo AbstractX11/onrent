@@ -1,28 +1,35 @@
 <template>
 <div>
-  <router-view :uid="uid" :authStatus="authStatus"></router-view>
+  <router-view :userData="userData" :uid="uid" :authStatus="authStatus">
+  </router-view>
 </div>
 </template>
-<script lang="ts">
+<script>
 import {ref} from 'vue'
 import {auth} from './firebase/firebase'
-
+import {getuser} from './firebase/userCollection'
 export default {
   setup(){
     const uid =ref('')
     const authStatus = ref(false)
-    auth.onAuthStateChanged((user:any)=>{
+    const userData=ref({
+    })
+    auth.onAuthStateChanged(async(user)=>{
     if(user){
       uid.value = user.uid
       console.log("user logged in")
       authStatus.value = true;
+      const getuserData = async()=>{
+        const  response= await getuser(uid.value)
+        userData.value=({...response})
+      }
+    await getuserData()
     }else{
       console.log("user logged out")
       authStatus.value = false
     }
-  })
-    
-    return {authStatus,uid}
+  })   
+    return {authStatus,uid,userData}
   }
 
 }

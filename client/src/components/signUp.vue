@@ -4,6 +4,20 @@
     <h5>Please fill this form to create an account</h5>
     <form v-on:submit.prevent="Validate">
       <input
+        id="imguploader"
+        @change="imgChosen($event)"
+        accept=".png,.jpeg,.jpg"
+        type="file"
+        placeholder="Choose image"
+        required
+      />
+      <!-- <label for="imguploader">Add profile picture</label> -->
+      <div class="avatar">
+        <img class="photo" v-if="form.image.length" :src="form.image">
+        <img class="svg" v-else src="../assets/Image/addphoto.svg">      
+      </div>
+      <input
+      class="details username"
         v-model="form.username"
         type="text"
         name="name"
@@ -11,6 +25,7 @@
         required
       />
       <input
+      class="details"
         v-model="form.email"
         type="text"
         name="email"
@@ -18,6 +33,7 @@
         required
       />
       <input
+      class="details"
         v-model="form.password"
         type="password"
         name="password"
@@ -25,14 +41,13 @@
         required
       />
       <input
+      class="details"
         v-model="confirm"
         type="password"
         name="confirm"
         placeholder="Confirm Password"
         required
       />
-      <!-- <div id="terms"><input id="checkbox" type="checkbox" name="terms" v-model="terms" required>
-        <label>Accept terms and condition</label></div> -->
       <p class="error" v-if="errors.mainError">
         {{ errors.mainError }}
       </p>
@@ -58,7 +73,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ref, reactive } from "vue";
 import router from "../router";
 import { auth} from "../firebase/firebase";
@@ -70,12 +85,21 @@ export default {
       username: "",
       email: "",
       password: "",
+      image:""
     });
     const confirm = ref("");
     const errors = reactive({
       mainError: "",
       confirmError: "",
     });
+    const imgChosen = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.image = reader.result;
+      };
+      reader.readAsDataURL(file);
+    };
     const handleSubmit = async () => {
       try {
         const cred = await auth.createUserWithEmailAndPassword(
@@ -85,7 +109,8 @@ export default {
         if (cred.user) {
           const userRecord = {
             uid:cred.user.uid,
-            username:form.username
+            username:form.username,
+            image:form.image
           }
           createUser(userRecord);
           router.replace({ name: "Home" });
@@ -108,7 +133,7 @@ export default {
         handleSubmit();
       }
     };
-    return { form, confirm, Validate, handleSubmit, errors};
+    return { form, confirm, Validate, handleSubmit, errors,imgChosen};
   },
 };
 </script>
@@ -140,27 +165,41 @@ form,
 form {
   margin-top: 30px;
 }
-/* #terms{
-    height: 40px;
-    display: flex;
-    align-items: center;
+#imguploader {
+  width: 120px;
+  height:120px;
+  border-radius: 50%;
+  margin:0 auto;
+  font-family: Poppins;
+  background: white;
+  border-radius: 50px;
+  box-shadow: 5px 5px 10px black;
+  color: black;
+  z-index:2;
+  outline: none;
+  opacity:0;
 }
-#checkbox{
-    height: 30px;
-    width:30px;
-    margin-top:20px;
-    appearance: none;
-    background: #CE5050;
-    margin-right:10px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.avatar{
+  width:120px;
+  height:120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top:-120px;
+  border-radius: 50%;
+  margin:0 auto;
+  overflow: hidden;
+  background: #ce5050;
 }
-#checkbox:checked:after {
-  content:"✔";
-  color: white;
-} */
+.avatar .photo{
+  height:100%;
+  width:100%;
+  object-fit: cover;
+}
+.username{
+  margin-top:-70px;
+}
 .centered,
 button {
   font-family: Montserrat;
@@ -185,7 +224,7 @@ button,
 #oauth {
   cursor: pointer;
 }
-input {
+.details {
   border: none;
   outline: none;
   background: transparent;

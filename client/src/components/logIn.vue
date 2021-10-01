@@ -26,9 +26,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import {reactive,ref} from 'vue'
 import {auth} from "../firebase/firebase"
+import router from '../router';
 export default {
     setup(){
       const form = reactive({
@@ -47,6 +48,9 @@ export default {
           }else if(errorCode === "auth/wrong-password"){
             errors.value = "Wrong Password"
           }
+        }
+        if(!errors.length){
+          router.replace({name:'Home'})
         }
       }
       return{form,handleSubmit,errors}

@@ -1,8 +1,8 @@
 <template>
 <div class="electronics">
-  <nav-bar :authStatus="authStatus"></nav-bar>
+  <nav-bar :userData="userData" :authStatus="authStatus"></nav-bar>
   <div class="card" v-for="product in products" :key="product.id">
-    <section-card :product="product">
+    <section-card :uid="uid" :product="product">
     </section-card>
   </div>
 </div>
@@ -15,7 +15,7 @@ import {ref} from 'vue'
 import SectionCard from '../components/sectionCard.vue'
 export default {
   components:{navBar,SectionCard},
-  props:['authStatus'],
+   props:['authStatus','uid', 'userData'],
   setup(){
       const products = ref([])
       const Products = async()=>{
