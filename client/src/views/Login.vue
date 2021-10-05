@@ -1,26 +1,30 @@
 <template>
-<div>
+  <div>
     <logo></logo>
     <main>
-        <log-in></log-in>
-        <img src="../assets/Image/login.svg">
+      <log-in></log-in>
+      <img src="../assets/Image/login.svg" />
     </main>
-</div>
-    
+  </div>
 </template>
 
 <script>
-import logIn from "../components/logIn.vue"
-import logo from "../components/logo.vue"
+import logIn from "../components/logIn.vue";
+import logo from "../components/logo.vue";
 export default {
-    components:{logIn,logo},
-}
+  components: { logIn, logo },
+};
 </script>
 
 <style scoped>
-    main{
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
+main {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+@media screen and (max-width: 870px) {
+  img {
+    display: none;
+  }
+}
 </style>

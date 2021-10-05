@@ -6,36 +6,23 @@
 body{
   padding:0 30px;
   background-color: rgba(44, 44, 44, 1);
+  overflow-x: hidden;
 
 }
 /* Scrollbar styles */
 /* width */
-::-webkit-scrollbar
+body::-webkit-scrollbar
 {
-    width: 15px;
+    width: 5px;
 } 
-::-webkit-scrollbar:hover
-{
-    display: block;
-}
-
 /* Track */
 ::-webkit-scrollbar-track {
     background: transparent;    
 }
-/* Track on hover */
-::-webkit-scrollbar-track{
-    background-color: transparent;
-}
+
 /* Handle */
 ::-webkit-scrollbar-thumb{
     background: #ce5050;
     border-radius: 10px;
-    border: 4.5px solid rgba(44, 44, 44, 1);
     
-}
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover{
-    border: 4.5px solid #242526;
-
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="product-form">
     <button type="button" @click="popupToggle" class="close"><img src="../assets/Image/exiticon.svg"></button>
-    <h2>Wanna rent your products? Fill up the form below!!</h2>
+    <h2>Wanna rent your products? <br>Fill up the form below!!</h2>
     <form @submit.prevent="handleSubmit">
       <input
         class="details"
@@ -103,6 +103,7 @@ export default {
 
 <style scoped>
 .product-form{
+  width:500px;
     position: relative;
     display: flex;
     flex-direction:column;
@@ -147,6 +148,7 @@ select option {
   width: 400px;
   font-family: Poppins;
   background: white;
+  color: black;
   border-radius: 50px;
   box-shadow: 5px 5px 10px black;
   outline: none;

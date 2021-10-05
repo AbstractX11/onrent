@@ -1,6 +1,6 @@
 <template>
 <div class="Profile">
-    <nav-bar :userData="userData" :authStatus="authStatus"></nav-bar>
+    <nav-bar :uid="uid" :userData="userData" :authStatus="authStatus"></nav-bar>
     <div class="body">
       <profile :userData="userData"></profile>  
     <post-box class="postbox" :uid="uid"></post-box>

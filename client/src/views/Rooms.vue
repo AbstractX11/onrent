@@ -1,6 +1,6 @@
 <template>
 <div class="electronics">
-    <nav-bar :userData="userData" :authStatus="authStatus"></nav-bar>
+    <nav-bar :uid="uid" :userData="userData" :authStatus="authStatus"></nav-bar>
   <div class="card" v-for="product in products" :key="product.id">
     <section-card :uid="uid" :product="product">
     </section-card>

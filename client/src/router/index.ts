@@ -46,9 +46,14 @@ const routes: Array<RouteRecordRaw> = [
     component:() => import('../views/Signup.vue') 
   },
   {
-    path:'/profile',
+    path:'/profile/:id',
     name:'Profile',
     component:() => import('../views/Profile.vue') 
+  },
+  {
+    path:'/:type/product/:productid',
+    name:'Product',
+    component:() => import('../views/singleProduct.vue') 
   }
 ]
 

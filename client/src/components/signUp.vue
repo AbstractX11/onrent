@@ -54,6 +54,9 @@
       <p class="error" v-if="errors.confirmError">
         {{ errors.confirmError }}
       </p>
+      <p class="error" v-if="errors.imageError">
+        {{ errors.imageError }}
+      </p>
 
       <button type="submit">Sign Up</button>
     </form>
@@ -91,12 +94,15 @@ export default {
     const errors = reactive({
       mainError: "",
       confirmError: "",
+      imageError:""
     });
     const imgChosen = (e) => {
       const file = e.target.files[0];
+      // 1048487
       const reader = new FileReader();
       reader.onloadend = () => {
         form.image = reader.result;
+        errors.imageError = file.size>1048485 ? "Larger image size" :""
       };
       reader.readAsDataURL(file);
     };
@@ -129,7 +135,7 @@ export default {
     const Validate = () => {
       errors.confirmError =
         form.password !== confirm.value ? "Passwords do not match" : "";
-      if (!errors.confirmError) {
+      if (!errors.confirmError && !errors.imageError) {
         handleSubmit();
       }
     };
@@ -153,7 +159,6 @@ h5 {
 
 form,
 #form {
-  width: 400px;
   display: flex;
   flex-direction: column;
   font-family: Poppins;
@@ -162,33 +167,35 @@ form,
   color: #ffffff;
   letter-spacing: 1px;
 }
+#form{
+  width: 40vw;
+  margin-bottom:30px;
+  padding: 30px;
+}
 form {
+  align-items: center;
   margin-top: 30px;
 }
 #imguploader {
-  width: 120px;
-  height:120px;
+  width: 90px;
+  height:90px;
   border-radius: 50%;
-  margin:0 auto;
   font-family: Poppins;
-  background: white;
-  border-radius: 50px;
-  box-shadow: 5px 5px 10px black;
-  color: black;
   z-index:2;
-  outline: none;
-  opacity:0;
+  opacity: 0;
+  cursor: pointer;
+}
+::-webkit-file-upload-button {
+  cursor: pointer;
 }
 .avatar{
-  width:120px;
-  height:120px;
-  position: relative;
+  width:90px;
+  height:90px;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  top:-120px;
   border-radius: 50%;
-  margin:0 auto;
   overflow: hidden;
   background: #ce5050;
 }
@@ -197,8 +204,8 @@ form {
   width:100%;
   object-fit: cover;
 }
-.username{
-  margin-top:-70px;
+.avatar .svg{
+  border-radius: 50%;
 }
 .centered,
 button {
@@ -212,8 +219,8 @@ button {
 }
 button {
   margin: 10px auto;
-  width: 140px;
-  height: 40px;
+  width: 35%;
+  padding:12px 0;
   background: #ce5050;
   border: none;
   border-radius: 5px;
@@ -225,6 +232,7 @@ button,
   cursor: pointer;
 }
 .details {
+  width:100%;
   border: none;
   outline: none;
   background: transparent;
@@ -235,6 +243,7 @@ button,
   font-size: 15px;
 }
 ::placeholder {
+  font-family: Poppins;
   color: #ffffff;
 }
 #oauth {
@@ -252,5 +261,20 @@ button,
 .error{
   font-size:small;
   color: #ce5050;
+}
+@media screen and (max-width: 1100px) {
+  #form{
+    width:50vw;
+  }
+}
+@media screen and (max-width: 870px) {
+  #form{
+    width:60vw;
+  }
+}
+@media screen and (max-width: 690px) {
+  #form{
+    width:80vw;
+  }
 }
 </style>

@@ -1,57 +1,51 @@
 <template>
   <div id="header">
-    <logo></logo>
-    <div id="nav">
-      <router-link style="text-decoration: none" :to="{ name: 'Rooms' }"
-        ><p>Rooms</p></router-link
-      >
-      <router-link style="text-decoration: none" :to="{ name: 'Vehicles' }"
-        ><p>Vehicles</p></router-link
-      >
-      <router-link style="text-decoration: none" :to="{ name: 'Electronics' }"
-        ><p>Electronics</p></router-link
-      >
-      <router-link style="text-decoration: none" :to="{ name: 'Houses' }"
-        ><p>Houses</p></router-link
-      >
-    </div>
-    <div id="sidediv">
-      <router-link :to="{ name: 'Search' }">
-        <img src="../assets/Image/search.svg" />
-      </router-link>
-      <div @click="toggleStatus" id="account">
-        <img class="avatar" v-if="authStatus" :src="user.image" />
-        <img v-else src="../assets/Image/signin.svg"/>
+    <logo v-if="screenWidth > 270" id="logo"></logo>
+    <div class="nav">
+      <div id="main-nav" v-if="screenWidth > 870" >
+        <nav-bar-links></nav-bar-links>
       </div>
-      <ul v-if="dropdownStatus" class="dropdown">
-        <li v-if="!authStatus">
-          <img src="../assets/Image/user.svg" />
-          <router-link
-            style="text-decoration: none; color: black"
-            :to="{ name: 'Login' }"
-            >Login</router-link
-          >
-        </li>
-        <div v-else>
-          <li>
+      <div v-else id="ham-menu">
+        <img src="../assets/Image/menu.svg" alt="">
+      </div>
+      <div id="sidediv">
+        <router-link :to="{ name: 'Search' }">
+          <img src="../assets/Image/search.svg" />
+        </router-link>
+        <div @click="toggleStatus" id="account">
+          <img class="avatar" v-if="authStatus" :src="user.image" />
+          <img v-else src="../assets/Image/signin.svg" />
+        </div>
+        <ul v-if="dropdownStatus" class="dropdown">
+          <li v-if="!authStatus">
+            <img src="../assets/Image/user.svg" />
             <router-link
-              style="text-decoration: none;color:black;"
-              :to="{ name: 'Profile' }"
+              style="text-decoration: none; color: black"
+              :to="{ name: 'Login' }"
+              >Login</router-link
             >
-              <img src="../assets/Image/user.svg" />Profile
-            </router-link>
           </li>
-          <li
-            style="
+          <div v-else>
+            <li>
+              <router-link
+                style="text-decoration: none;color:black;"
+                :to="{ name: 'Profile', params: { id: uid } }"
+              >
+                <img src="../assets/Image/user.svg" />Profile
+              </router-link>
+            </li>
+            <li
+              style="
               border-top: 1px solid #ce5050;
               justify-content: center;
               padding-top: 10px;
             "
-          >
-            <button @click="popupToggle">Log-out</button>
-          </li>
-        </div>
-      </ul>
+            >
+              <button @click="popupToggle">Log-out</button>
+            </li>
+          </div>
+        </ul>
+      </div>
     </div>
     <pop-ups v-if="popupStatus">
       <p>Are you sure you want to logout?</p>
@@ -63,26 +57,27 @@
   </div>
 </template>
 
-<script lang="ts">
-import { reactive,ref, computed} from "vue";
+<script>
+import { reactive, ref, computed } from "vue";
 import logo from "../components/logo.vue";
 import popUps from "../components/popUps.vue";
 import { auth } from "../firebase/firebase";
 import router from "../router/index";
+import navBarLinks from "./navBarLinks.vue"
 
 export default {
-  components: { logo, popUps },
-  props: ["authStatus","userData"],
-  setup(props:any) {
-    const user= reactive({
-      username:computed(()=>props.userData.username),
-      image:computed(()=>props.userData.image)
-    })
+  components: { logo, popUps,navBarLinks },
+  props: ["authStatus", "userData", "uid"],
+  setup(props) {
+    const user = reactive({
+      username: computed(() => props.userData.username),
+      image: computed(() => props.userData.image),
+    });
     const dropdownStatus = ref(false);
     const popupStatus = ref(false);
-    const imgsrc = ref('../assets/Image/signin.svg')
-    if(!user.image){
-      imgsrc.value = user.image
+    const imgsrc = ref("../assets/Image/signin.svg");
+    if (!user.image) {
+      imgsrc.value = user.image;
     }
     const logout = () => {
       auth.signOut();
@@ -94,22 +89,46 @@ export default {
     const popupToggle = () => {
       popupStatus.value = !popupStatus.value;
     };
-    return { dropdownStatus, toggleStatus, logout, popupStatus, popupToggle,imgsrc,user};
+    const screenWidth = ref(screen.width)
+        window.onresize=()=>{
+          screenWidth.value = screen.width
+        }
+    return {
+      dropdownStatus,
+      toggleStatus,
+      logout,
+      popupStatus,
+      popupToggle,
+      imgsrc,
+      user,
+      screenWidth
+    };
   },
 };
 </script>
 
 <style scoped>
-#header {
-  display: grid;
-  grid-template-columns: 55% 30% 15%;
+.nav{
+  margin-top:20px;
+}
+#logo {
+  position: absolute;
+  margin-top:-14px;
+
 }
 p {
   color: #ffffff;
 }
-#nav {
-  min-width: 400px;
+.nav{
   display: flex;
+  align-items:center;
+  justify-content: right;
+}
+#main-nav{
+  min-width: 400px;
+  position: static;
+  display: flex;
+  margin-right:100px;
   align-items: center;
   justify-content: space-between;
   font-family: Poppins;
@@ -118,29 +137,29 @@ p {
   font-size: 15px;
   line-height: 36px;
 }
-#nav .router-link-active{
-  border-bottom:4px solid #ce5050;
+#main-nav .router-link-active {
+  border-bottom: 4px solid #ce5050;
 }
 #sidediv {
   display: flex;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
 }
 #account {
-  width: 30px;
-  height: 30px;
+  height:24px;
+  width: 24px;
   margin-left: 15px;
   margin-bottom: -1px;
   cursor: pointer;
-  border-radius:50%;
+  border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-#account .avatar{
+#account .avatar {
   height: 100%;
-  width:100%;
+  width: 100%;
   object-fit: cover;
 }
 .dropdown {

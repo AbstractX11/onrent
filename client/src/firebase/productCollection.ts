@@ -31,3 +31,12 @@ export const saveProduct = async (form: any) => {
     return(error.message)
   }  
 };
+export const getProduct =async (path:string,id:string)=>{
+  try{
+    const productCollection = db.collection(path);
+    const user = await productCollection.doc(id).get()
+    return user.exists? user.data(): null
+  }catch(error){
+    console.log(error)
+  }  
+}

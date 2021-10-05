@@ -68,7 +68,6 @@ h2 {
 
 form,
 #form {
-  width: 400px;
   display: flex;
   flex-direction: column;
   font-family: Poppins;
@@ -76,6 +75,9 @@ form,
   font-weight: 400;
   color: #ffffff;
   letter-spacing: 1px;
+}
+#form{
+  width:35vw;
 }
 form {
   margin-top: 30px;
@@ -103,9 +105,9 @@ button {
 }
 #loginbtn {
   margin: 10px auto;
-  width: 140px;
+  width: 25%;
   border-radius: 5px;
-  height: 40px;
+  padding: 13px 0;
   background: #ce5050;
   color: #ffffff;
 }
@@ -116,10 +118,13 @@ input {
   margin-bottom: 25px;
   padding: 10px 15px;
   color: #ffffff;
+  font-family: Poppins;
   background: transparent;
   font-size: 15px;
 }
 ::placeholder {
+  font-family: Poppins;
+  letter-spacing: 1px;
   color: #ffffff;
 }
 #oauth {
@@ -137,5 +142,25 @@ input {
 .error{
   font-size:small;
   color: #ce5050;
+}
+@media screen and (max-width: 1100px) {
+  #form{
+    width:50vw;
+  }
+}
+@media screen and (max-width: 870px) {
+  #form{
+    width:60vw;
+  }
+}
+@media screen and (max-width: 690px) {
+  #form{
+    width:80vw;
+  }
+}
+@media screen and (max-width: 370) {
+  #form{
+    width:100vw;
+  }
 }
 </style>
