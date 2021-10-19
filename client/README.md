@@ -15,7 +15,7 @@ npm run serve
 npm run build
 ```
 
-##Inside src/firebase
+### Inside src/firebase
 **Add a file firebase.ts with following code snippet**
 ```typescript
 // Import the functions you need from the SDKs you need
