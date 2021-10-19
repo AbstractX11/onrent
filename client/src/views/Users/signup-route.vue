@@ -2,17 +2,17 @@
   <div>
     <logo></logo>
     <main>
-      <log-in></log-in>
-      <img src="../assets/Image/login.svg" />
+      <sign-up></sign-up>
+      <img src="../../assets/Image/signup.svg" />
     </main>
   </div>
 </template>
 
 <script>
-import logIn from "../components/logIn.vue";
-import logo from "../components/logo.vue";
+import Logo from "@/components/Navbar/logo.vue";
+import signUp from "../../components/Forms/signUp.vue";
 export default {
-  components: { logIn, logo },
+  components: { signUp, Logo },
 };
 </script>
 
@@ -21,6 +21,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+img {
+  display: block;
+  margin-right: -140px;
 }
 @media screen and (max-width: 870px) {
   img {

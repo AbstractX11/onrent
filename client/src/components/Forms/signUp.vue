@@ -11,13 +11,12 @@
         placeholder="Choose image"
         required
       />
-      <!-- <label for="imguploader">Add profile picture</label> -->
       <div class="avatar">
-        <img class="photo" v-if="form.image.length" :src="form.image">
-        <img class="svg" v-else src="../assets/Image/addphoto.svg">      
+        <img class="photo" v-if="form.image.length" :src="form.image" />
+        <img class="svg" v-else src="../../assets/Image/addphoto.svg" />
       </div>
       <input
-      class="details username"
+        class="details username"
         v-model="form.username"
         type="text"
         name="name"
@@ -25,7 +24,7 @@
         required
       />
       <input
-      class="details"
+        class="details"
         v-model="form.email"
         type="text"
         name="email"
@@ -33,7 +32,7 @@
         required
       />
       <input
-      class="details"
+        class="details"
         v-model="form.password"
         type="password"
         name="password"
@@ -41,7 +40,7 @@
         required
       />
       <input
-      class="details"
+        class="details"
         v-model="confirm"
         type="password"
         name="confirm"
@@ -62,8 +61,8 @@
     </form>
     <p class="centered">OR<br /><br />Signup with</p>
     <div id="oauth">
-      <img src="../assets/Image/googlelogo.svg" />
-      <img src="../assets/Image/facebooklogo.svg" />
+      <img @click="signInwithGoogle" src="../../assets/Image/googlelogo.svg" />
+      <img  @click="signInwithFacebook" src="../../assets/Image/facebooklogo.svg" />
     </div>
     <p class="centered linktologin">
       Already have an account?
@@ -78,33 +77,33 @@
 
 <script>
 import { ref, reactive } from "vue";
-import router from "../router";
-import { auth} from "../firebase/firebase";
-import {createUser} from "../firebase/userCollection"
-
+import router from "../../router";
+import { auth } from "../../firebase/firebase";
+import { createUser } from "../../firebase/userCollection";
+import { resizeFile } from "../../helper";
+import { getAuth,GoogleAuthProvider, signInWithPopup,FacebookAuthProvider} from "firebase/auth";
 export default {
   setup() {
     const form = reactive({
       username: "",
       email: "",
       password: "",
-      image:""
+      image: "",
     });
     const confirm = ref("");
     const errors = reactive({
       mainError: "",
       confirmError: "",
-      imageError:""
+      imageError: "",
     });
-    const imgChosen = (e) => {
-      const file = e.target.files[0];
-      // 1048487
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        form.image = reader.result;
-        errors.imageError = file.size>1048485 ? "Larger image size" :""
-      };
-      reader.readAsDataURL(file);
+    const imgChosen = async (event) => {
+      if (event.target.files) {
+        const image = event.target.files[0];
+        const compressed_image = await resizeFile(image);
+        form.image = compressed_image;
+        errors.imageError =
+          compressed_image.length > 1000000 ? "Larger image size" : "";
+      }
     };
     const handleSubmit = async () => {
       try {
@@ -114,21 +113,22 @@ export default {
         );
         if (cred.user) {
           const userRecord = {
-            uid:cred.user.uid,
-            username:form.username,
-            image:form.image
-          }
+            uid: cred.user.uid,
+            username: form.username,
+            image: form.image,
+          };
           createUser(userRecord);
           router.replace({ name: "Home" });
         }
       } catch (error) {
         const errorCode = error.code;
-        if (errorCode==="auth/invalid-email"){
-          errors.mainError = "Invalid email address"
-        }else if (errorCode === "auth/email-already-in-use"){
-          errors.mainError = "An account already exists with given email address"
-        }else if (errorCode === "auth/weak-password"){
-          errors.mainError = "Password should be at least 6 characters"
+        if (errorCode === "auth/invalid-email") {
+          errors.mainError = "Invalid email address";
+        } else if (errorCode === "auth/email-already-in-use") {
+          errors.mainError =
+            "An account already exists with given email address";
+        } else if (errorCode === "auth/weak-password") {
+          errors.mainError = "Password should be at least 6 characters";
         }
       }
     };
@@ -139,8 +139,42 @@ export default {
         handleSubmit();
       }
     };
-    return { form, confirm, Validate, handleSubmit, errors,imgChosen};
-  },
+    const signInwithGoogle = async()=>{
+      try{
+        const provider = new GoogleAuthProvider();
+        const auth = getAuth();
+        const res = await signInWithPopup(auth, provider);
+        const userRecord = {
+          uid:res.user.uid,
+          username:res.user.displayName,
+          image:res.user.photoURL
+        }
+        createUser(userRecord);
+        router.replace({ name: "Home" });
+
+      }catch(error){
+        console.log(error)
+      }
+    }
+      const signInwithFacebook = async()=>{
+      try{
+        const provider = new FacebookAuthProvider();
+        const auth = getAuth();
+        const res = await signInWithPopup(auth, provider);
+        const userRecord = {
+          uid:res.user.uid,
+          username:res.user.displayName,
+          image:res.user.photoURL
+        }
+        createUser(userRecord);
+        router.replace({ name: "Home" });
+
+      }catch(error){
+        console.log(error)
+      }
+    }
+    return { form, confirm, Validate, handleSubmit, errors, imgChosen,signInwithGoogle,signInwithFacebook };
+  }
 };
 </script>
 
@@ -167,9 +201,9 @@ form,
   color: #ffffff;
   letter-spacing: 1px;
 }
-#form{
+#form {
   width: 40vw;
-  margin-bottom:30px;
+  margin-bottom: 30px;
   padding: 30px;
 }
 form {
@@ -178,19 +212,19 @@ form {
 }
 #imguploader {
   width: 90px;
-  height:90px;
+  height: 90px;
   border-radius: 50%;
   font-family: Poppins;
-  z-index:2;
+  z-index: 2;
   opacity: 0;
   cursor: pointer;
 }
 ::-webkit-file-upload-button {
   cursor: pointer;
 }
-.avatar{
-  width:90px;
-  height:90px;
+.avatar {
+  width: 90px;
+  height: 90px;
   position: absolute;
   display: flex;
   align-items: center;
@@ -199,12 +233,12 @@ form {
   overflow: hidden;
   background: #ce5050;
 }
-.avatar .photo{
-  height:100%;
-  width:100%;
+.avatar .photo {
+  height: 100%;
+  width: 100%;
   object-fit: cover;
 }
-.avatar .svg{
+.avatar .svg {
   border-radius: 50%;
 }
 .centered,
@@ -220,7 +254,7 @@ button {
 button {
   margin: 10px auto;
   width: 35%;
-  padding:12px 0;
+  padding: 12px 0;
   background: #ce5050;
   border: none;
   border-radius: 5px;
@@ -232,7 +266,7 @@ button,
   cursor: pointer;
 }
 .details {
-  width:100%;
+  width: 100%;
   border: none;
   outline: none;
   background: transparent;
@@ -258,23 +292,23 @@ button,
 .linktologin {
   color: #ce5050;
 }
-.error{
-  font-size:small;
+.error {
+  font-size: small;
   color: #ce5050;
 }
 @media screen and (max-width: 1100px) {
-  #form{
-    width:50vw;
+  #form {
+    width: 50vw;
   }
 }
 @media screen and (max-width: 870px) {
-  #form{
-    width:60vw;
+  #form {
+    width: 60vw;
   }
 }
 @media screen and (max-width: 690px) {
-  #form{
-    width:80vw;
+  #form {
+    width: 80vw;
   }
 }
 </style>

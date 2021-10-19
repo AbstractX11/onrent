@@ -1,27 +1,27 @@
-import {db} from './firebase'
+import { db } from "./firebase";
 
 //Usercollection
-const usersCollection = db.collection ('/users')
+export const usersCollection = db.collection("/users");
 
 //createuser function
-export const createUser = (user:any)=>{
+export const createUser = (user: any) => {
   return usersCollection.doc(user.uid).set({
-    username:user.username,
-    image:user.image
-  })
-}
+    username: user.username,
+    image: user.image,
+  });
+};
 
-export const getuser =async (id:string)=>{
-  try{
-    const user = await usersCollection.doc(id).get()
-    return user.exists? user.data(): null
-  }catch(error){
-    console.log(error)
-  }  
-}
-export const deleteUser = (id:string)=>{
-  return usersCollection.doc(id).delete()
-}
-export const updateUser = (id:string,user:any)=>{
-  return usersCollection.doc(id).update(user)
-}
+export const getuser = async (id: string) => {
+  try {
+    const user = await usersCollection.doc(id).get();
+    return user.exists ? user.data() : null;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const deleteUser = (id: string) => {
+  return usersCollection.doc(id).delete();
+};
+export const updateUser = async(id: string, user: any) => {
+  await usersCollection.doc(id).update(user);
+};

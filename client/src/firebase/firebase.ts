@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
-import firebase from "firebase/compat/app";                           
+import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
-import {ref,onUnmounted} from 'vue'
+import { ref, onUnmounted } from "vue";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,17 +13,15 @@ const Config = {
   projectId: "onrent-dd339",
   storageBucket: "onrent-dd339.appspot.com",
   messagingSenderId: "430116853328",
-  appId: "1:430116853328:web:2037bdc9611537862ca355"
+  appId: "1:430116853328:web:2037bdc9611537862ca355",
 };
 
 // Initialize Firebase
-const firebaseApp =  firebase.initializeApp(Config);
+const firebaseApp = firebase.initializeApp(Config);
 export const db = firebaseApp.firestore();
-
 
 //firebase auth
 export const auth = firebaseApp.auth();
-
 
 // export const useLoadUsers =()=>{
 //   const users =ref([])

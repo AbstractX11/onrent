@@ -2,6 +2,7 @@
 /node_modules
 /directories
 /firebase
+/ssl
 
 
 # local env files

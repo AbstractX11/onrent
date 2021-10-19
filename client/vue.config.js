@@ -1,6 +1,9 @@
+const fs = require('fs');
 module.exports = {
-    devServer: {
-      port: 8080,
-      host: '0.0.0.0'
-    }
-  }
+  devServer: {
+    https: {
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
+    },
+  },
+};

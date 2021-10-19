@@ -1,8 +1,15 @@
 <template>
-  <div @click="changeRoute" class="section-card">
+  <div class="section-card">
     <main class="main-container">
       <div v-if="product.sellerid === uid" class="edit">
-        <img src="../assets/Image/edit.svg" />
+        <img @click="onClick" src="../../assets/Image/edit.svg" />
+        <pop-ups class="popup" v-if="postBoxpopuUp">
+          <edit-form
+            :productdata="product"
+            :uid="uid"
+            :popupToggle="onClick"
+          ></edit-form>
+        </pop-ups>
       </div>
       <div class="image-view">
         <img id="product-img" :src="product.Image" alt="product" />
@@ -17,6 +24,9 @@
         <main id="main-view-mid">
           <p>PRICE</p>
           <div id="price">Rs {{ product.Price }}</div>
+          <div class="lil-image-view">
+            <img id="lil-product-img" :src="product.Image" alt="product" />
+          </div>
           <p class="description">Description</p>
           <div id="description">{{ product.Description }}</div>
         </main>
@@ -32,20 +42,18 @@
 </template>
 
 <script>
-// import router from '../router/index'
-// import {computed,ref} from 'vue'
-import { useRoute } from "vue-router";
+import { ref } from "vue";
+import editForm from "../Forms/editForm.vue";
+import PopUps from "../popUps.vue";
 export default {
+  components: { editForm, PopUps },
   props: ["product", "uid"],
   setup(props) {
-    const route = useRoute();
-    const changeRoute = () => {
-      const routeName = route.name.toLowerCase();
-      console.log(routeName);
-      // const id = ref(computed(()=>props.product.id))
-      // router.push({name:'Product',params:{type:routeName,productid:id.value},props:{uid:'IxSU6M9Z4pbByQzeFrCJL5K3Qoi1'}})
+    const postBoxpopuUp = ref(false);
+    const onClick = () => {
+      postBoxpopuUp.value = !postBoxpopuUp.value;
     };
-    return { changeRoute };
+    return { postBoxpopuUp, onClick };
   },
 };
 </script>
@@ -53,7 +61,7 @@ export default {
 <style scoped>
 .main-container {
   width: 65vw;
-  height: 55vh;
+  height: 65vh;
   min-height: 400px;
   font-family: Poppins;
   background: linear-gradient(
@@ -66,6 +74,7 @@ export default {
   border-radius: 5px;
   display: flex;
   align-items: top;
+  justify-content: center;
   position: relative;
 }
 .image-view {
@@ -74,7 +83,17 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
+.lil-image-view{
+  display: none;
+  width:100%;
+  height:50%;
+}
+#lil-product-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
 #product-img {
   width: 90%;
   height: 90%;
@@ -117,6 +136,13 @@ export default {
   position: absolute;
   right: 10px;
   border-radius: 10px;
+  cursor: pointer;
+}
+.edit img {
+  z-index: 3;
+}
+.popup {
+  z-index: 5;
 }
 #location {
   font-size: medium;
@@ -179,8 +205,23 @@ p.description {
   }
 }
 @media screen and (max-width: 500px) {
+  .main-container{
+    min-height:75vh;
+  }
   .image-view {
     display: none;
+  }
+  .lil-image-view{
+    display:block
+  }
+  .footer-btn{
+    position: relative;
+  }
+
+}
+@media screen and (max-width: 400px) {
+  .main-container{
+    width:90vw;
   }
 }
 @media screen and (max-width: 270px) {

@@ -20,22 +20,22 @@ export default {};
 </script>
 
 <style scoped>
-.navlinks{
+.navlinks {
   min-width: 400px;
   position: static;
   display: flex;
-  margin-right:100px;
+  margin-right: 100px;
   align-items: center;
   justify-content: space-between;
   font-family: Poppins;
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
-  line-height: 36px;
 }
-a{
-    color:white;
+a {
+  color: white;
 }
 .navlinks .router-link-active {
   border-bottom: 4px solid #ce5050;
-}</style>
+}
+</style>

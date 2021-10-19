@@ -2,23 +2,38 @@
   <div id="header">
     <logo v-if="screenWidth > 270" id="logo"></logo>
     <div class="nav">
-      <div id="main-nav" v-if="screenWidth > 870" >
+      <div id="main-nav" v-if="screenWidth > 870">
         <nav-bar-links></nav-bar-links>
       </div>
+      <!-- hammenu -->
       <div v-else id="ham-menu">
-        <img src="../assets/Image/menu.svg" alt="">
+        <div @click="toggleMenu" class="menu-container">
+          <img src="../../assets/Image/menu.svg" alt="" />
+        </div>
+        <transition name="menu">
+          <nav-bar-links v-if="showMenu"></nav-bar-links>
+        </transition>
       </div>
       <div id="sidediv">
-        <router-link :to="{ name: 'Search' }">
-          <img src="../assets/Image/search.svg" />
-        </router-link>
+        <div class="search-box">
+          <button class="btn-search">
+            <span class="material-icons">
+              search
+            </span>
+          </button>
+          <input
+            type="text"
+            class="input-search"
+            placeholder="Type to Search..."
+          />
+        </div>
         <div @click="toggleStatus" id="account">
           <img class="avatar" v-if="authStatus" :src="user.image" />
-          <img v-else src="../assets/Image/signin.svg" />
+          <img v-else src="../../assets/Image/signin.svg" />
         </div>
         <ul v-if="dropdownStatus" class="dropdown">
           <li v-if="!authStatus">
-            <img src="../assets/Image/user.svg" />
+            <img src="../../assets/Image/user.svg" />
             <router-link
               style="text-decoration: none; color: black"
               :to="{ name: 'Login' }"
@@ -31,7 +46,7 @@
                 style="text-decoration: none;color:black;"
                 :to="{ name: 'Profile', params: { id: uid } }"
               >
-                <img src="../assets/Image/user.svg" />Profile
+                <img src="../../assets/Image/user.svg" />Profile
               </router-link>
             </li>
             <li
@@ -59,14 +74,14 @@
 
 <script>
 import { reactive, ref, computed } from "vue";
-import logo from "../components/logo.vue";
-import popUps from "../components/popUps.vue";
-import { auth } from "../firebase/firebase";
-import router from "../router/index";
-import navBarLinks from "./navBarLinks.vue"
+import logo from "./logo.vue";
+import popUps from "../popUps.vue";
+import { auth } from "../../firebase/firebase";
+import router from "../../router/index";
+import navBarLinks from "./navBarLinks.vue";
 
 export default {
-  components: { logo, popUps,navBarLinks },
+  components: { logo, popUps, navBarLinks },
   props: ["authStatus", "userData", "uid"],
   setup(props) {
     const user = reactive({
@@ -75,7 +90,8 @@ export default {
     });
     const dropdownStatus = ref(false);
     const popupStatus = ref(false);
-    const imgsrc = ref("../assets/Image/signin.svg");
+    const showMenu = ref(false);
+    const imgsrc = ref("../../assets/Image/signin.svg");
     if (!user.image) {
       imgsrc.value = user.image;
     }
@@ -89,10 +105,17 @@ export default {
     const popupToggle = () => {
       popupStatus.value = !popupStatus.value;
     };
-    const screenWidth = ref(screen.width)
-        window.onresize=()=>{
-          screenWidth.value = screen.width
-        }
+    const toggleMenu = () => {
+      showMenu.value = !showMenu.value;
+    };
+    const screenWidth = ref(window.innerWidth);
+    window.onresize = () => {
+      screenWidth.value = window.innerWidth;
+    };
+    // closing menu with tap on window if opened
+    // window.onfocus=()=>{
+    //   showMenu.value=showMenu.value? !showMenu.value : showMenu.value
+    // }
     return {
       dropdownStatus,
       toggleStatus,
@@ -101,52 +124,71 @@ export default {
       popupToggle,
       imgsrc,
       user,
-      screenWidth
+      screenWidth,
+      toggleMenu,
+      showMenu,
     };
   },
 };
 </script>
 
 <style scoped>
-.nav{
-  margin-top:20px;
-}
-#logo {
-  position: absolute;
-  margin-top:-14px;
-
+#header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 p {
   color: #ffffff;
 }
-.nav{
+.nav {
   display: flex;
-  align-items:center;
-  justify-content: right;
-}
-#main-nav{
-  min-width: 400px;
-  position: static;
-  display: flex;
-  margin-right:100px;
   align-items: center;
-  justify-content: space-between;
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 36px;
+  justify-content: right;
 }
 #main-nav .router-link-active {
   border-bottom: 4px solid #ce5050;
 }
+#ham-menu {
+  z-index: 5;
+}
+#ham-menu .menu-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  cursor: pointer;
+}
+#ham-menu .navlinks{
+  min-width: 40vw;
+  background: rgb(53, 51, 51);
+  flex-flow: column;
+  justify-content: flex-start;
+  text-align: right;
+  margin-right: 0;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: 60px;
+  border-radius: 5px;
+  line-height: 40px;
+}
+.menu-enter-from,
+.menu-leave-to {
+  transform: translateX(400px);
+}
+.menu-enter-active,
+.menu-leave-active {
+  transition: all 1s ease;
+}
+
 #sidediv {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 #account {
-  height:24px;
+  height: 24px;
   width: 24px;
   margin-left: 15px;
   margin-bottom: -1px;
@@ -208,5 +250,60 @@ p {
 }
 #confirm {
   color: #50ce76;
+}
+
+/*search*/
+.search-box {
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+}
+.input-search {
+  height: 50px;
+  width: 50px;
+  border-style: none;
+  padding: 10px;
+  font-size: .8rem;
+  letter-spacing: 2px;
+  outline: none;
+  border-radius: 25px;
+  transition: all 0.5s ease-in-out;
+  background-color: transparent;
+  padding-right: 50px;
+  color: #fff;
+}
+.input-search::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: .8rem;
+  letter-spacing: 2px;
+  font-weight: 100;
+}
+.btn-search {
+  width: 50px;
+  height: 50px;
+  border-style: none;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50%;
+  position: absolute;
+  right: 0px;
+  color: #ffffff;
+  background-color: transparent;
+  pointer-events: painted;
+}
+.btn-search:focus ~ .input-search {
+  width: 300px;
+  border-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+.input-search:focus {
+  width: 300px;
+  border-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
 </style>

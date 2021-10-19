@@ -16,12 +16,12 @@ body::-webkit-scrollbar
     width: 5px;
 } 
 /* Track */
-::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
     background: transparent;    
 }
 
 /* Handle */
-::-webkit-scrollbar-thumb{
+body::-webkit-scrollbar-thumb{
     background: #ce5050;
     border-radius: 10px;
     
