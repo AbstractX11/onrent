@@ -1,8 +1,8 @@
 .DS_Store
 /node_modules
 /directories
-/firebase
 /ssl
+**/firebase/firebase.ts
 
 
 # local env files
