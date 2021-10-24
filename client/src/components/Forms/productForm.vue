@@ -5,44 +5,43 @@
     </button>
     <h2>Fill up the form below</h2>
     <form @submit.prevent="handleSubmit">
+      <label>Name of Product</label>
       <input
         class="details"
         v-model="form.name"
         type="text"
-        placeholder="Name of Product"
         required
       />
+      <label>Choose type of Product</label>
       <select class="details" @change="onChange($event)" name="Type" required>
-        <option value="" disabled selected hidden
-          >Choose type of Product</option
-        >
         <option value="rooms">Rooms</option>
         <option value="vehicles">Vehicles</option>
         <option value="electronics">Electronics</option>
         <option value="houses">Houses</option>
       </select>
+      <label>Address</label>
       <input
         class="details"
         v-model="form.address"
         type="text"
-        placeholder="Address"
         required
       />
+      <label>Price</label>
       <input
         class="details"
         v-model="form.price"
         type="text"
-        placeholder="Price"
         required
       />
+      <label>Description</label>
       <div
         class="details description"
         :html="form.description"
         @input="onDivInput($event)"
         contentEditable="true"
       >
-        Description
       </div>
+      <label>Choose image</label>
        <div class="image-container">
         <input
         class="imguploader"
@@ -113,13 +112,16 @@ export default {
 <style scoped>
 .product-form {
   width: 40vw;
+  height:95vh;
   position: relative;
   display: flex;
   overflow-y:scroll;
   flex-direction: column;
   align-items: center;
 }
-
+label{
+  margin-bottom:5px;
+}
 h2 {
   margin-top: 10px;
   font-family: Montserrat;
@@ -129,7 +131,7 @@ h2 {
   margin-bottom: 0;
 }
 form {
-  margin-top: 20px;
+  margin: 10px;
   width: 75%;
   display: flex;
   flex-direction: column;
@@ -138,7 +140,8 @@ form {
   border: none;
   outline: none;
   background: transparent;
-  border-bottom: 1px solid #ce5050;
+  border: 1px solid #ce5050;
+  border-radius:5px;
   margin-bottom: 25px;
   padding: 10px 15px;
   color: #ffffff;
@@ -155,6 +158,7 @@ select option {
   height: 100px;
   font-family: Poppins;
   letter-spacing: 1px;
+  overflow-y:scroll;
 }
 .image-container{
   position: relative;
@@ -226,7 +230,7 @@ select,input{
   font-size: small;
   color: #ce5050;
 }
-/* Scrollbar styles */
+/* Scrollbar styles
 /* width */
 ::-webkit-scrollbar {
   background: transparent;
@@ -241,7 +245,7 @@ select,input{
 ::-webkit-scrollbar-thumb {
   background: transparent;
   border-radius: 10px;
-}
+} 
 @media screen and (max-width:1170px) {
   .product-form{
     width:50vw;

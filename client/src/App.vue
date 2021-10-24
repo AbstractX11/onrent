@@ -8,9 +8,7 @@
 import { ref } from "vue";
 import { auth } from "./firebase/firebase";
 import { getuser,usersCollection } from "./firebase/userCollection";
-import singleProduct from "./views/singleProduct.vue";
 export default {
-  components: { singleProduct },
   setup() {
     const uid = ref("");
     const authStatus = ref(false);

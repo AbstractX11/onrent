@@ -49,11 +49,11 @@ const routes: Array<RouteRecordRaw> = [
     path:'/profile/:id',
     name:'Profile',
     component:() => import('../views/Profile.vue') 
-  },
-  {
-    path:'/:type/product/:productid',
-    name:'Product',
-    component:() => import('../views/singleProduct.vue') 
+  }
+  ,{
+    path:'/:type/:id',
+    name:'eachProduct',
+    component:()=>import('../views/singleProduct.vue')
   }
   //error404
   ,{
@@ -61,6 +61,7 @@ const routes: Array<RouteRecordRaw> = [
     name:'notFound',
     component:()=>import('../views/Errors/notFound.vue')
   }
+
 ]
 
 const router = createRouter({

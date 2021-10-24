@@ -25,6 +25,7 @@ export const saveProduct = async (form: any) => {
       Price: form.price,
       Description: form.description,
       sellerid: form.uid,
+      type:form.type
     };
     const addProduct = await productCollection.add(newForm);
     if (addProduct) {
@@ -89,3 +90,6 @@ export const getProfileProducts = async (id:string)=>{
   return (products)
 }
 
+export const deleteProduct = async (path:string,id:string)=>{
+  await db.collection(path).doc(id).delete();
+}

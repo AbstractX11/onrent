@@ -1,21 +1,37 @@
 <template>
   <div class="section-card">
     <main class="main-container">
-      <div v-if="product.sellerid === uid" class="edit">
-        <img @click="onClick" src="../../assets/Image/edit.svg" />
-        <pop-ups class="popup" v-if="postBoxpopuUp">
+      <div v-if="product.sellerid === uid" class="buttons">
+        <button class="edit" @click="onClick(1)">
+          <span class="material-icons">
+            edit
+          </span>
+        </button>
+        <pop-ups class="popup" v-if="popUp==1">
           <edit-form
             :productdata="product"
             :uid="uid"
             :popupToggle="onClick"
           ></edit-form>
         </pop-ups>
+        <pop-ups v-if="popUp==2">
+          <p class="deletealert">Are you sure you want to delete it permanently?</p>
+          <div class="buttonsinpopup">
+            <button id="cancel" @click="onClick(0)">Cancel</button>
+            <button id="confirm" @click="handleDelete">Confirm</button>
+          </div>
+        </pop-ups>
+        <button class="delete" @click="onClick(2)">
+          <span class="material-icons">
+            delete
+          </span>
+        </button>
       </div>
-      <div class="image-view">
+      <div @click="eachProduct" class="image-view">
         <img id="product-img" :src="product.Image" alt="product" />
       </div>
 
-      <div class="main-view">
+      <div @click="eachProduct" class="main-view">
         <header id="main-view-header">
           <div id="title-name">{{ product.Name }}</div>
           <div id="location">{{ product.Address }}</div>
@@ -45,15 +61,31 @@
 import { ref } from "vue";
 import editForm from "../Forms/editForm.vue";
 import PopUps from "../popUps.vue";
+import { useRoute } from "vue-router";
+import { deleteProduct } from "../../firebase/productCollection";
+import router from "../../router/index";
 export default {
   components: { editForm, PopUps },
   props: ["product", "uid"],
   setup(props) {
-    const postBoxpopuUp = ref(false);
-    const onClick = () => {
-      postBoxpopuUp.value = !postBoxpopuUp.value;
+    const popUp = ref(0);
+    const route = useRoute();
+    const onClick = (num) => {
+      popUp.value = num;
     };
-    return { postBoxpopuUp, onClick };
+    const handleDelete = async () => {
+      const path = `products/types/${props.product.type}`;
+      console.log(path);
+      await deleteProduct(path, props.product.id);
+      router.go();
+    };
+    const eachProduct = () => {
+      router.push({
+        name: "eachProduct",
+        params: { id: props.product.id, type: route.name.toLowerCase() },
+      });
+    };
+    return { popUp, onClick, eachProduct, handleDelete };
   },
 };
 </script>
@@ -83,10 +115,10 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.lil-image-view{
+.lil-image-view {
   display: none;
-  width:100%;
-  height:50%;
+  width: 100%;
+  height: 50%;
 }
 #lil-product-img {
   width: 100%;
@@ -125,24 +157,26 @@ export default {
   font-weight: bold;
   color: #ce5050;
 }
-.edit {
-  background: #ce5050;
-  width: 6%;
-  min-width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 0;
+.buttons {
   position: absolute;
   right: 10px;
   border-radius: 10px;
-  cursor: pointer;
-}
-.edit img {
-  z-index: 3;
 }
 .popup {
   z-index: 5;
+}
+.delete,
+.edit {
+  background: #ce5050;
+  color: white;
+  outline: none;
+  border: none;
+  padding: 3px;
+  margin: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
 }
 #location {
   font-size: medium;
@@ -205,28 +239,52 @@ p.description {
   }
 }
 @media screen and (max-width: 500px) {
-  .main-container{
-    min-height:75vh;
+  .main-container {
+    height: 75%;
   }
   .image-view {
     display: none;
   }
-  .lil-image-view{
-    display:block
+  .lil-image-view {
+    display: block;
   }
-  .footer-btn{
+  .footer-btn {
     position: relative;
   }
-
 }
 @media screen and (max-width: 400px) {
-  .main-container{
-    width:90vw;
+  .main-container {
+    width: 90vw;
   }
 }
 @media screen and (max-width: 270px) {
   .edit {
     display: none;
   }
+}
+.deletealert{
+  color: white;
+  letter-spacing: 1px;
+}
+.buttonsinpopup button {
+  font-weight: bold;
+  border: none;
+  outline: none;
+  background: rgba(44, 44, 44, 1);
+  border-radius: 5px;
+  margin: 5px;
+  margin-bottom: 0;
+  padding: 7px;
+  cursor: pointer;
+}
+.buttonsinpopup {
+  text-align: right;
+  margin-bottom: 0;
+}
+#cancel {
+  color: #ce5050;
+}
+#confirm {
+  color: #50ce76;
 }
 </style>

@@ -1,15 +1,144 @@
 <template>
-<div class="showcasecard">
-    <h1>Hello</h1>
-</div>
+  <div class="wrapper">
+    <div class="outer">
+      <div class="content">
+        <span class="bg">EXCLUSIVE</span>
+        <h1>
+          Afro<br />
+          baseball hair
+        </h1>
+        <p>
+          Shadow your real allegiance to New York's Pirate radio with this cool
+          cap featuring the Graphic Know Wave logo.
+        </p>
+
+        <div class="button">
+          <a href="#">$115</a>
+          <a class="rent-btn" href="#">RENT NOW</a>
+        </div>
+      </div>
+      <img
+        src="https://bit.ly/2kOzUTm"
+        width="300px"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
-<style>
+<style scoped>
+* {
+  box-sizing: border-box;
+}
 
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Montserrat;
+  width: 100%;
+  height: 70vh;
+}
+
+.outer {
+  position: relative;
+  background: rgb(34, 32, 32);
+  height: 100%;
+  width: 100%;
+  border-radius:20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+img {
+  position: absolute;
+  top: 0px;
+  right: -20px;
+  z-index: 0;
+  animation-delay: 0.5s;
+}
+
+.content {
+  animation-delay: 0.3s;
+  position: absolute;
+  left: 5%;
+  bottom:20%;
+  z-index: 3;
+}
+
+h1 {
+  color:#ffff;
+}
+
+p {
+  width: 280px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #aaa;
+  margin: 20px 0;
+}
+
+.bg {
+  display: inline-block;
+  color: #fff;
+  background: cornflowerblue;
+  padding: 5px 10px;
+  border-radius: 50px;
+  font-size: 0.7em;
+}
+.button {
+  width: fit-content;
+  height: fit-content;
+  margin-top: 10px;
+}
+
+.button a {
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  font-size: 11px;
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  border: 1px solid #aaa;
+  font-weight: bold;
+}
+
+.button a:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 0%;
+  background: #ce5050;
+  height: 100%;
+  z-index: -1;
+  transition: width 0.3s ease-in-out;
+  transform: skew(-25deg);
+  transform-origin: right;
+}
+
+.button a:hover:after {
+  width: 150%;
+  left: -10px;
+  transform-origin: left;
+}
+
+.button a:hover {
+  color: #fff;
+  transition: all 0.5s ease;
+}
+
+.button a:nth-of-type(1) {
+  border-radius: 50px 0 0 50px;
+  border-right: none;
+}
+
+.button a:nth-of-type(2) {
+  border-radius: 0px 50px 50px 0;
+}
 </style>

@@ -1,132 +1,85 @@
 <template>
-  <div class="product-page">
-    <!-- <nav-bar :uid="uid"  :userData="userData" :authStatus="authStatus"></nav-bar> -->
-    <main class="main-container">
-      <div v-if="product.sellerid === uid" class="edit">
-        <img src="../assets/Image/edit.svg" />
+<div>
+  <nav-bar
+      :uid="uid"
+      :userData="userData"
+      :authStatus="authStatus"
+    ></nav-bar>
+       <main class="container">
+      <!-- Right Column -->
+      <div class="left-column">
+        <img :src="product.Image">
       </div>
-      <div class="image-view">
-        <img id="product-img" :src="product.Image" alt="product" />
-      </div>
+      <div class="right-column">
+        <!-- Product Description -->
+        <div class="product-description">
+          <h1>{{product.Name}}</h1>
+          <span>{{product.Address}}</span>
+          <p>{{product.Description}}</p>
+        </div>
 
-      <div class="main-view">
-        <header id="main-view-header">
-          <div id="title-name">{{ product.Name }}</div>
-          <div id="location">{{ product.Address }}</div>
-        </header>
-
-        <main id="main-view-mid"></main>
-
-        <nav class="footer-btn">
-          <div class="button-container">
-            Rent Now
-          </div>
-        </nav>
+        <!-- Product Pricing -->
+        <div class="product-price">
+          <span>{{product.Price}}</span>
+          <a href="#" class="cart-btn">RENT NOW</a>
+        </div>
       </div>
     </main>
-  </div>
+</div>
+
 </template>
 
 <script>
-// import navBar from '@/components/navBar.vue'
-import { ref } from "vue";
-import { useRoute } from "vue-router";
-import { getProduct } from "../firebase/productCollection";
+import { useRoute } from 'vue-router'
+import navBar from '../components/Navbar/navBar.vue'
+import { getProduct } from '../firebase/productCollection'
+import {ref} from 'vue'
 export default {
-  // components:{navBar},
-  props: ["uid"],
-  setup() {
-    const product = ref();
-    const route = useRoute();
-    console.log(route.params.type);
-    const path = `/products/types/${route.params.type}`;
-    console.log(path);
-    const reqProduct = async () => {
-      product.value = await getProduct(path, route.params.productid);
-      console.log(product.value);
-    };
-    reqProduct();
-    return { product };
-  },
-};
+  components: { navBar },
+  props: ["authStatus", "userData", "uid"],
+  setup(){
+    const route = useRoute()
+    const collectionPath = `products/types/${route.params.type}`
+    const product= ref({});
+    const get = async()=>{
+      product.value = await getProduct(collectionPath,route.params.id)
+    }
+    get()
+    return {product}
+  }
+}
 </script>
 
 <style scoped>
-.main-container {
-  width: 50%;
-  min-height: 400px;
-  display: flex;
-  background-color: #333;
-  border-radius: 5px;
+.container{
+  width:100%;
+  height:80vh;
+  padding:10px;
+  display:flex;
+  justify-content:space-around;
+  font-family: Poppins;
+  background: linear-gradient(
+    to top right,
+    rgba(1, 1, 1, 0.7),
+    rgba(1, 1, 1, 0.4)
+  );
 }
-
-.image-view {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.left-column{
+  height:100%;
+  width:45%;
+  min-width:200px;
 }
-
-#product-img {
-  width: 90%;
-  height: 90%;
-  border-radius: 10px;
+.left-column img{
+  height:100%;
+  width:100%;
   object-fit: cover;
+  border-radius:10px;
+}
+.right-column{
+  width:50%
+}
+.product-description h1{
+  color:#ce5050;
 }
 
-.main-view {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-#main-view-header {
-  font-size: 25px;
-  width: 100%;
-  padding-top: 20px;
-  font-family: sans-serif;
-}
-
-#title-name {
-  font-size: 1em;
-  font-weight: bold;
-  color: #fefefe;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#location {
-  font-size: 0.6em;
-  color: grey;
-  margin-top: 10px;
-}
-
-.footer-btn {
-  padding: 10px 0%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.button-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #fefefe;
-  width: 90%;
-  font-size: 14px;
-  padding: 16px 0;
-  border-radius: 10px;
-  background-color: #ff385c;
-  font-family: sans-serif;
-}
-
-#main-view-mid {
-  min-height: 60%;
-  background-color: yellow;
-}
 </style>

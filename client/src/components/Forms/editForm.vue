@@ -1,53 +1,54 @@
 <template>
   <div class="edit-form">
-    <button type="button" @click="popupToggle" class="close">
+    <button type="button" @click="popupToggle(0)" class="close">
       <img src="../../assets/Image/exiticon.svg" />
     </button>
     <h2>Edit Details of your product</h2>
     <form @submit.prevent="handleSubmit">
+   <label>Name of Product</label>
       <input
         class="details"
         v-model="form.name"
         type="text"
-        placeholder="Name of Product"
         required
       />
-      <div class="details" title="Type cannot be edited">{{ form.type }}</div>
+      <label>Choose type of Product</label>
+      <div class="details type" title="Type cannot be edited">{{ form.type }}</div>
+      <label>Address</label>
       <input
         class="details"
         v-model="form.address"
         type="text"
-        placeholder="Address"
         required
       />
+      <label>Price</label>
       <input
         class="details"
         v-model="form.price"
         type="text"
-        placeholder="Price"
         required
       />
+      <label>Description</label>
       <div
         class="details description"
         :html="form.description"
         @input="onDivInput($event)"
         contentEditable="true"
-      >
-        {{ form.description }}
+      >{{form.description}}
       </div>
-      <div class="image-container">
+      <label>Choose image</label>
+       <div class="image-container">
         <input
-          class="imguploader"
-          @change="imgChosen($event)"
-          accept=".png,.jpeg,.jpg"
-          type="file"
-        />
-        <div class="cover-photo">
-          <img class="photo" v-if="form.image.length" :src="form.image" />
-          <img class="svg" v-else src="../../assets/Image/addphoto.svg" />
-        </div>
+        class="imguploader"
+        @change="imgChosen($event)"
+        accept=".png,.jpeg,.jpg"
+        type="file"
+      />
+      <div class="cover-photo">
+        <img class="photo" v-if="form.image.length" :src="form.image" />
+        <img class="svg" v-else src="../../assets/Image/addphoto.svg" />
       </div>
-
+      </div>
       <br />
       <p class="error" v-if="errors">
         {{ errors }}
@@ -62,16 +63,14 @@ import { ref, reactive, computed } from "vue";
 import { updateProduct } from "../../firebase/productCollection";
 import router from "../../router/index";
 import { resizeFile } from "../../helper";
-import { useRoute } from "vue-router";
 export default {
   props: ["uid", "productdata", "popupToggle"],
   setup(props) {
     const product = props.productdata;
-    const route = useRoute();
     const form = reactive({
       image: product.Image,
       name: product.Name,
-      type: route.name.toLowerCase(),
+      type: product.type,
       address: product.Address,
       price: product.Price,
       description: product.Description,
@@ -115,37 +114,27 @@ export default {
 <style scoped>
 .edit-form {
   width: 40vw;
-  overflow-y: scroll;
+  height:95vh;
   position: relative;
   display: flex;
+  overflow-y:scroll;
   flex-direction: column;
   align-items: center;
 }
-/* Scrollbar styles */
-/* width */
-::-webkit-scrollbar {
-  background: transparent;
-  width: 5px;
-}
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 10px;
+label{
+  color: #ffff;
+  margin-bottom:5px;
 }
 h2 {
-  margin-top: 5px;
+  margin-top: 10px;
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
   color: #ce5050;
+  margin-bottom: 0;
 }
 form {
-  margin-top: 20px;
+  margin: 10px;
   width: 75%;
   display: flex;
   flex-direction: column;
@@ -154,17 +143,16 @@ form {
   border: none;
   outline: none;
   background: transparent;
-  border-bottom: 1px solid #ce5050;
+  border: 1px solid #ce5050;
+  border-radius:5px;
   margin-bottom: 25px;
   padding: 10px 15px;
   color: #ffffff;
   font-size: 15px;
 }
-select option {
-  background: #ce5050;
-  font-family: Poppins;
+.type{
+  background: rgb(78, 78, 78);
 }
-
 ::placeholder {
   color: #ffffff;
 }
@@ -172,13 +160,9 @@ select option {
   height: 100px;
   font-family: Poppins;
   letter-spacing: 1px;
+  overflow-y:scroll;
 }
-select,
-input {
-  font-family: Poppins;
-  letter-spacing: 1px;
-}
-.image-container {
+.image-container{
   position: relative;
 }
 .imguploader {
@@ -193,8 +177,8 @@ input {
   width: 90px;
   height: 90px;
   position: absolute;
-  border-radius: 5px;
-  top: 0;
+  border-radius:5px;
+  top:0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +194,7 @@ input {
   border-radius: 50%;
 }
 ::-webkit-file-upload-button {
-  cursor: pointer;
+  cursor:pointer;
 }
 .close {
   background: transparent;
@@ -219,9 +203,13 @@ input {
   border: none;
   border-radius: 50%;
   position: absolute;
-  top: 0;
+  top: 10px;
   right: 0;
   cursor: pointer;
+}
+select,input{
+  font-family:Poppins;
+  letter-spacing: 1px;
 }
 
 .submit {
@@ -244,24 +232,44 @@ input {
   font-size: small;
   color: #ce5050;
 }
-@media screen and (max-width: 1170px) {
-  .edit-form {
-    width: 50vw;
-  }
+/* Scrollbar styles
+/* width */
+::-webkit-scrollbar {
+  background: transparent;
+  width: 5px;
 }
-@media screen and (max-width: 970px) {
-  .edit-form {
-    width: 55vw;
-  }
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-@media screen and (max-width: 870px) {
-  .edit-form {
-    width: 65vw;
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+} 
+@media screen and (max-width:1170px) {
+  .edit-form{
+    width:50vw;
   }
+  
 }
-@media screen and (max-width: 670px) {
-  .edit-form {
-    width: 85vw;
+@media screen and (max-width:970px) {
+  .edit-form{
+    width:55vw;
   }
+  
+}
+@media screen and (max-width:870px) {
+  .edit-form{
+    width:65vw;
+  }
+  
+}
+@media screen and (max-width:670px) {
+  .edit-form{
+    width:85vw;
+  }
+  
 }
 </style>
