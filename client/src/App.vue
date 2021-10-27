@@ -7,7 +7,7 @@
 <script>
 import { ref } from "vue";
 import { auth } from "./firebase/firebase";
-import { getuser,usersCollection } from "./firebase/userCollection";
+import { getuser, usersCollection } from "./firebase/userCollection";
 export default {
   setup() {
     const uid = ref("");
@@ -28,14 +28,14 @@ export default {
         authStatus.value = false;
       }
     });
-    usersCollection.onSnapshot(async()=>{
+    usersCollection.onSnapshot(async () => {
       const getuserData = async () => {
-          const response = await getuser(uid.value);
-          userData.value = { ...response };
-        };
-        await getuserData();
-    })
-    return { authStatus, uid, userData };
+        const response = await getuser(uid.value);
+        userData.value = { ...response };
+      };
+      await getuserData();
+    });
+    return { authStatus, uid, userData};
   },
 };
 </script>
